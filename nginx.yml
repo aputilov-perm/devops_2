@@ -1,0 +1,23 @@
+---
+- name: Установить Nginx и загрузить index.html
+  hosts: all
+  become: yes  # Использовать sudo
+  tasks:
+    - name: Установить Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Заполнить /var/www/html/index.html
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: nginx
+        group: nginx
+        mode: '0644'
+
+    - name: Перезапустить Nginx
+      service:
+        name: nginx
+        state: restarted
